@@ -1,0 +1,30 @@
+name: Commit Images Change
+description: Update manifests and merge changes into argocd-stag
+inputs:
+  k8sManifestsPath:
+    description: The directory that contains K8s Manifests
+    required: true
+    default: ./k8s
+  imageTag:
+    description: Image Tag
+    required: true
+  shouldMergeStaging:
+    description: Whether changes should be merged into staging
+    required: false
+    default: 'false'
+runs:
+  using: composite
+  steps:
+    - name: Configure GitHub SSH
+      run: make -Bf ${{ github.action_path }}/Makefile git/configure-ssh
+      shell: bash
+    - name: Commit Images Change
+      env:
+        K8S_MANIFESTS_PATH: ${{ inputs.k8sManifestsPath }}
+        IMAGE_TAG: ${{ inputs.imageTag }}
+      run: make -Bf ${{ github.action_path }}/Makefile git/commit-image-changes
+      shell: bash
+    - name: Merge into Staging
+      if: inputs.shouldDeployStaging == 'true'
+      run: make -Bf ${{ github.action_path }}/Makefile git/merge-argocd-stag
+      shell: bash
