@@ -1,5 +1,5 @@
-name: Commit Images Change
-description: Update manifests and merge changes into argocd-stag
+name: Commit Kustomizations
+description: Commit Kustomizations and Merge changes into argocd-stag
 inputs:
   k8sManifestsPath:
     description: The directory that contains K8s Manifests
@@ -18,7 +18,7 @@ runs:
     - name: Configure GitHub SSH
       run: make -Bf ${{ github.action_path }}/Makefile git/configure-ssh
       shell: bash
-    - name: Commit Images Change
+    - name: Commit Kustomizations Change
       env:
         K8S_MANIFESTS_PATH: ${{ inputs.k8sManifestsPath }}
         IMAGE_TAG: ${{ inputs.imageTag }}
