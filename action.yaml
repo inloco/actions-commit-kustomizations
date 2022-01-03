@@ -19,10 +19,7 @@ runs:
       run: make -Bf ${{ github.action_path }}/Makefile git/configure-ssh
       shell: bash
     - name: Commit Kustomizations Change
-      env:
-        K8S_MANIFESTS_PATH: ${{ inputs.k8sManifestsPath }}
-        IMAGE_TAG: ${{ inputs.imageTag }}
-      run: make -Bf ${{ github.action_path }}/Makefile git/commit-image-changes
+      run: make -Bf ${{ github.action_path }}/Makefile K8S_MANIFESTS_PATH="${{ inputs.k8sManifestsPath }}" IMAGE_TAG="${{ inputs.imageTag }}" git/commit-image-changes
       shell: bash
     - name: Merge into Staging
       if: inputs.shouldDeployStaging == 'true'

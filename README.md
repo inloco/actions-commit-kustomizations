@@ -1,1 +1,1 @@
-# deploy-staging-action
+# commit-kustomizations-action
