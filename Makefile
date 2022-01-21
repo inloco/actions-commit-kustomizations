@@ -17,6 +17,6 @@ git/configure-ssh:
 git/merge-argocd-stag:
 	export DEFAULT_BRANCH="$$(git rev-parse --abbrev-ref HEAD)"
 	git checkout argocd-stag
-	git merge $$(git rev-parse $$(git remote show)/$${DEFAULT_BRANCH})
-	git push -u "$$(git remote show)" argocd-stag
+	git reset --hard $$(git remote show)/$${DEFAULT_BRANCH}
+	git push --force -u "$$(git remote show)" argocd-stag
 .PHONY: git/commit-image-changes
