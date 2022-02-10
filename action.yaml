@@ -1,5 +1,5 @@
 name: Commit Kustomizations
-description: Commit Kustomizations and Merge changes into argocd-stag
+description: Commit Kustomizations and sync changes into branch
 inputs:
   k8sManifestsPath:
     description: The directory that contains K8s Manifests
@@ -8,8 +8,12 @@ inputs:
   imageTag:
     description: Image Tag
     required: true
-  shouldMergeStaging:
-    description: Whether changes should be merged into staging
+  branch:
+    description: Branch to be synced with the default branch
+    required: false
+    default: argocd-staging-product    
+  shouldSyncBranch:
+    description: Whether branch should be synced with the default branch
     required: false
     default: 'false'
 runs:
@@ -21,7 +25,7 @@ runs:
     - name: Commit Kustomizations Change
       run: make -Bf ${{ github.action_path }}/Makefile K8S_MANIFESTS_PATH="${{ inputs.k8sManifestsPath }}" IMAGE_TAG="${{ inputs.imageTag }}" git/commit-image-changes
       shell: bash
-    - name: Merge into Staging
-      if: inputs.shouldMergeStaging == 'true'
-      run: make -Bf ${{ github.action_path }}/Makefile git/merge-argocd-stag
+    - name: Sync branch with default branch
+      if: inputs.shouldSyncBranch == 'true'
+      run: make -Bf ${{ github.action_path }}/Makefile BRANCH="${{ inputs.branch }}" git/sync-branch
       shell: bash

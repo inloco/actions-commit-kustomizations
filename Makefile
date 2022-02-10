@@ -14,9 +14,9 @@ git/configure-ssh:
 .PHONY: git/configure-ssh
 
 .ONESHELL:
-git/merge-argocd-stag:
+git/sync-branch:
 	export DEFAULT_BRANCH="$$(git rev-parse --abbrev-ref HEAD)"
-	git checkout argocd-stag
+	git checkout $(BRANCH)
 	git reset --hard $$(git remote show)/$${DEFAULT_BRANCH}
-	git push --force -u "$$(git remote show)" argocd-stag
+	git push --force -u "$$(git remote show)" $(BRANCH)
 .PHONY: git/commit-image-changes
