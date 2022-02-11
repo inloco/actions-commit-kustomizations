@@ -1,13 +1,13 @@
 name: Commit Kustomizations
 description: Commit Kustomizations and sync changes into branch
 inputs:
-  k8sManifestsPath:
-    description: The directory that contains K8s Manifests
-    required: true
-    default: ./k8s
   imageTag:
     description: Image Tag
     required: true
+  k8sManifestsPath:
+    description: The directory that contains K8s Manifests
+    required: false
+    default: ./k8s
   branch:
     description: Branch to be synced with the default branch
     required: false
