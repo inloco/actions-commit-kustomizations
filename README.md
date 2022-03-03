@@ -1,1 +1,1 @@
-# commit-kustomizations-action
+# Commit Kustomizations Action
