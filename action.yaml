@@ -8,12 +8,12 @@ inputs:
     description: The directory that contains K8s Manifests
     required: false
     default: ./k8s
-  branch:
-    description: Branch to be synced with the default branch
+  stagingBranch:
+    description: Staging branch to be synced with the default branch
     required: false
     default: argocd-staging-product    
-  shouldSyncBranch:
-    description: Whether branch should be synced with the default branch
+  shouldSyncStagingBranch:
+    description: Whether staging branch should be synced with the default branch
     required: false
     default: 'false'
 runs:
@@ -25,7 +25,7 @@ runs:
     - name: Commit Kustomizations Change
       run: make -Bf ${{ github.action_path }}/Makefile K8S_MANIFESTS_PATH="${{ inputs.k8sManifestsPath }}" IMAGE_TAG="${{ inputs.imageTag }}" git/commit-image-changes
       shell: bash
-    - name: Sync branch with default branch
-      if: inputs.shouldSyncBranch == 'true'
-      run: make -Bf ${{ github.action_path }}/Makefile BRANCH="${{ inputs.branch }}" git/sync-branch
+    - name: Sync staging branch with default branch
+      if: inputs.shouldSyncStagingBranch == 'true'
+      run: make -Bf ${{ github.action_path }}/Makefile BRANCH="${{ inputs.stagingBranch }}" git/sync-branch
       shell: bash
