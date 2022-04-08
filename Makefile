@@ -1,7 +1,7 @@
 MKFILE_DIR = $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
 
 edit-kustomizations:
-	OVERLAY="$(OVERLAY)" $(MKFILE_DIR)/kustomize-set-images.sh
+	OVERLAY="$(OVERLAY)" $(MKFILE_DIR)/kustomize-set-image-tags.sh
 .PHONY: edit-kustomizations
 
 configure-ssh:
