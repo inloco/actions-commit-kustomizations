@@ -1,31 +1,7 @@
 name: Commit Kustomizations
-description: Commit Kustomizations and sync changes into branch
-inputs:
-  imageTag:
-    description: Image Tag
-    required: true
-  k8sManifestsPath:
-    description: The directory that contains K8s Manifests
-    required: false
-    default: ./k8s
-  stagingBranch:
-    description: Staging branch to be synced with the default branch
-    required: false
-    default: argocd-staging-product    
-  shouldSyncStagingBranch:
-    description: Whether staging branch should be synced with the default branch
-    required: false
-    default: 'false'
+description: Commit all kustomization.yaml file changes in the k8s/ directory to the Default Branch
 runs:
   using: composite
   steps:
-    - name: Configure GitHub SSH
-      run: make -Bf ${{ github.action_path }}/Makefile git/configure-ssh
-      shell: bash
-    - name: Commit Kustomizations Change
-      run: make -Bf ${{ github.action_path }}/Makefile K8S_MANIFESTS_PATH="${{ inputs.k8sManifestsPath }}" IMAGE_TAG="${{ inputs.imageTag }}" git/commit-image-changes
-      shell: bash
-    - name: Sync staging branch with default branch
-      if: inputs.shouldSyncStagingBranch == 'true'
-      run: make -Bf ${{ github.action_path }}/Makefile BRANCH="${{ inputs.stagingBranch }}" git/sync-branch
+    - run: make -Bf ${{ github.action_path }}/Makefile commit-kustomizations
       shell: bash
