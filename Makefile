@@ -1,4 +1,8 @@
-SHELL = /bin/bash
+MKFILE_DIR = $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
+
+edit-kustomizations:
+	OVERLAY="$(OVERLAY)" $(MKFILE_DIR)/kustomize-set-images.sh
+.PHONY: edit-kustomizations
 
 configure-ssh:
 	sudo chown user ~/.ssh
@@ -9,6 +13,6 @@ configure-ssh:
 commit-kustomizations: configure-ssh
 	git reset
 	find ./k8s -type f -name kustomization.yaml -exec git add {} \+
-	git commit -m "chore(k8s): update images to version $$(git describe --always --dirty --exclude '*')"
+	git commit -m "chore(k8s): update images to version $${TAG}"
 	git push --set-upstream "$$(git remote show)" "$$(git rev-parse --abbrev-ref HEAD)"
 .PHONY: commit-kustomizations

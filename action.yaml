@@ -1,7 +1,30 @@
-name: Commit Kustomizations
-description: Commit all kustomization.yaml file changes in the k8s/ directory to the Default Branch
+name: Set Kustomization Images
+description: Set Kustomization Images and Commit changes
+inputs:
+  production-images:
+    description: Prodution Environment Images
+    required: false
+  staging-images:
+    description: Staging Environment Images
+    required: false
+  integration-images:
+    description: Integration Environment Images
+    required: false
 runs:
   using: composite
   steps:
-    - run: make -Bf ${{ github.action_path }}/Makefile commit-kustomizations
+    - name: Export Tag
+      run: echo TAG="$(git describe --always --dirty --exclude '*')" >> "${GITHUB_ENV}"
+      shell: bash
+    - name: Set Kustomization Images
+      run: |
+        export IMAGES="${{ inputs.production-images }}"
+        make -Bf ${{ github.action_path }}/Makefile OVERLAY="production" edit-kustomizations
+        export IMAGES="${{ inputs.staging-images }}"
+        make -Bf ${{ github.action_path }}/Makefile OVERLAY="staging" edit-kustomizations
+        export IMAGES="${{ inputs.staging-images }}"
+        make -Bf ${{ github.action_path }}/Makefile OVERLAY="integration" edit-kustomizations
+      shell: bash
+    - name: Commit Kustomizations
+      run: make -Bf ${{ github.action_path }}/Makefile commit-kustomizations
       shell: bash
