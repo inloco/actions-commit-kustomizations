@@ -13,9 +13,9 @@ runs:
     - name: Set Kustomization Image Tags
       run: |
         export IMAGES="${{ inputs.images }}"
+        make -Bf ${{ github.action_path }}/Makefile OVERLAY="integration" edit-kustomizations
         make -Bf ${{ github.action_path }}/Makefile OVERLAY="production" edit-kustomizations
         make -Bf ${{ github.action_path }}/Makefile OVERLAY="staging" edit-kustomizations
-        make -Bf ${{ github.action_path }}/Makefile OVERLAY="integration" edit-kustomizations
       shell: bash
     - name: Commit Kustomizations
       run: make -Bf ${{ github.action_path }}/Makefile commit-kustomizations
