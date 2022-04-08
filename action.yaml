@@ -1,14 +1,8 @@
 name: Set Kustomization Images
 description: Set Kustomization Images and Commit changes
 inputs:
-  production:
-    description: Prodution Environment Images
-    required: false
-  staging:
-    description: Staging Environment Images
-    required: false
-  integration:
-    description: Integration Environment Images
+  images:
+    description: K8s Images
     required: false
 runs:
   using: composite
@@ -18,11 +12,9 @@ runs:
       shell: bash
     - name: Set Kustomization Images
       run: |
-        export IMAGES="${{ inputs.production }}"
+        export IMAGES="${{ inputs.images }}"
         make -Bf ${{ github.action_path }}/Makefile OVERLAY="production" edit-kustomizations
-        export IMAGES="${{ inputs.staging }}"
         make -Bf ${{ github.action_path }}/Makefile OVERLAY="staging" edit-kustomizations
-        export IMAGES="${{ inputs.integration }}"
         make -Bf ${{ github.action_path }}/Makefile OVERLAY="integration" edit-kustomizations
       shell: bash
     - name: Commit Kustomizations
