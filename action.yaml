@@ -1,5 +1,5 @@
-name: Set Kustomization Images
-description: Set Kustomization Images and Commit changes
+name: Kustomize Image Tags
+description: Set Kustomization Image Tags and Commit changes
 inputs:
   images:
     description: K8s Images
@@ -10,7 +10,7 @@ runs:
     - name: Export Tag
       run: echo TAG="$(git describe --always --dirty --exclude '*')" >> "${GITHUB_ENV}"
       shell: bash
-    - name: Set Kustomization Images
+    - name: Set Kustomization Image Tags
       run: |
         export IMAGES="${{ inputs.images }}"
         make -Bf ${{ github.action_path }}/Makefile OVERLAY="production" edit-kustomizations
