@@ -8,7 +8,7 @@ runs:
   using: composite
   steps:
     - name: Export Tag
-      run: echo TAG="$(git describe --always --dirty --exclude '*')" >> "${GITHUB_ENV}"
+      run: echo TAG="$(make -Bsf ${{ github.action_path }}/Makefile tag)" >> "${GITHUB_ENV}"
       shell: bash
     - name: Set Kustomization Image Tags
       run: |

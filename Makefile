@@ -1,5 +1,9 @@
 MKFILE_DIR = $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
 
+tag:
+	git describe --always --dirty --exclude '*'
+.PHONY: tag
+
 edit-kustomizations:
 	OVERLAY="$(OVERLAY)" $(MKFILE_DIR)/kustomize-set-image-tags.sh
 .PHONY: edit-kustomizations
