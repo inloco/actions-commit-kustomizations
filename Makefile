@@ -1,8 +1,8 @@
 MKFILE_DIR = $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
 
-tag:
+image-tag:
 	git describe --always --dirty --exclude '*'
-.PHONY: tag
+.PHONY: image-tag
 
 edit-kustomizations:
 	OVERLAY="$(OVERLAY)" $(MKFILE_DIR)/kustomize-set-image-tags.sh
@@ -17,6 +17,6 @@ configure-ssh:
 commit-kustomizations: configure-ssh
 	git reset
 	find ./k8s -type f -name kustomization.yaml -exec git add {} \+
-	git commit -m "chore(k8s): update images to version $${TAG}"
-	git push --set-upstream "$$(git remote show)" "$$(git rev-parse --abbrev-ref HEAD)"
+	git commit -m "chore(k8s): update images to version $(IMAGE_TAG)"
+	git push --set-upstream "$(shell git remote show)" "$(shell git rev-parse --abbrev-ref HEAD)"
 .PHONY: commit-kustomizations

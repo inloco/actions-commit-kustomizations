@@ -9,14 +9,14 @@ github:
   name: Update Kustomization Image Tags
   runs-on: ubuntu:latest
   steps:
-    - uses: actions/checkout@v2
+    - uses: inloco/actions-bootstrap@HEAD
     - uses: inloco/actions-kustomize-image-tags@HEAD
       with:
-        images: |
-          org-name/image-blue
-          org-name/image-green
-          org-name/image-red
-          org-name/image-yellow
+        image-repos: |
+          incognia/image-blue
+          incognia/image-green
+          incognia/image-red
+          incognia/image-yellow
 ```
 
 will try to update image tags in the following directories:
