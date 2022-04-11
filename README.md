@@ -5,9 +5,7 @@
 The following job:
 
 ```yaml
-github:
-  name: Update Kustomization Image Tags
-  runs-on: ubuntu:latest
+example:
   steps:
     - uses: inloco/actions-bootstrap@HEAD
     - uses: inloco/actions-kustomize-image-tags@HEAD
