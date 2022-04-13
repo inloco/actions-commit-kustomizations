@@ -4,13 +4,17 @@ inputs:
   image-repos:
     description: Image Repositories
     required: true
+  image-tag:
+    description: Custom Image Tag
+    required: false
+    default: commit-sha
 runs:
   using: composite
   steps:
     - name: Set Kustomization Image Tags
       run: |
         export IMAGE_REPOS="${{ inputs.image-repos }}"
-        export IMAGE_TAG="$(make -Bsf ${{ github.action_path }}/Makefile image-tag)"
+        export IMAGE_TAG="$(make -Bsf ${{ github.action_path }}/Makefile IMAGE_TAG="${{ inputs.image-tag }}" image-tag)"
         make -Bf ${{ github.action_path }}/Makefile OVERLAY="integration" edit-kustomizations
         make -Bf ${{ github.action_path }}/Makefile OVERLAY="production" edit-kustomizations
         make -Bf ${{ github.action_path }}/Makefile OVERLAY="staging" edit-kustomizations
