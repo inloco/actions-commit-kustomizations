@@ -10,7 +10,7 @@ edit-kustomizations:
 
 commit-kustomizations:
 	git reset
-	find ./k8s -type f -name kustomization.yaml -exec git add {} \+
+	find ./k8s -type f -name kustomization.y*ml -exec git add {} \+
 	git commit -m "chore(k8s): update images to version $(IMAGE_TAG)"
 	git push --set-upstream "$(shell git remote show)" "$(shell git rev-parse --abbrev-ref HEAD)"
 .PHONY: commit-kustomizations
