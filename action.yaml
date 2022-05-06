@@ -11,6 +11,10 @@ inputs:
 runs:
   using: composite
   steps:
+    - name: Enforce Manifests .yaml Extension
+      run: |
+        find ./k8s/overlays/*/kustomization.yml && echo 'This is an intentional error. K8s manifests extension must be ".yaml".' && exit 1 || echo 'Everything good to go!'
+      shell: bash
     - name: Set Kustomization Image Tags
       run: |
         export IMAGE_REPOS="${{ inputs.image-repos }}"
