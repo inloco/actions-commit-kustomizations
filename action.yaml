@@ -2,12 +2,12 @@ name: Kustomize Image Tags
 description: Set Kustomization Image Tags and Commit changes
 inputs:
   images:
-    description: Images to be pushed. Image tags will be used as suffix
+    description: Images to be pushed. Image tags will be used as suffix.
     required: false
   image-repos:
     description: Image Repositories
     required: false
-    deprecationMessage: This input is deprecated. Use "images" instead
+    deprecationMessage: THIS INPUT IS DEPRECATED. Use 'images' instead.
   image-tag:
     description: Custom Image Tag
     required: false
