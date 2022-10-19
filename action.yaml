@@ -12,6 +12,13 @@ inputs:
     description: Custom Image Tag
     required: false
     default: commit-sha
+  k8s-overlays:
+    description: A list of K8s overlays to be edited
+    required: false
+    default: |
+      production
+      staging
+      integration
 runs:
   using: composite
   steps:
@@ -32,8 +39,7 @@ runs:
           export IMAGES="${IMAGE_REPOS}"
         fi
 
-        make -Bf ${{ github.action_path }}/Makefile OVERLAY="global-product" edit-kustomizations
-        make -Bf ${{ github.action_path }}/Makefile OVERLAY="integration" edit-kustomizations
-        make -Bf ${{ github.action_path }}/Makefile OVERLAY="production" edit-kustomizations
-        make -Bf ${{ github.action_path }}/Makefile OVERLAY="staging" edit-kustomizations
-        make -Bf ${{ github.action_path }}/Makefile commit-kustomizations
+        for OVERLAY in "${{ inputs.k8s-overlays }}"
+        do
+          make -Bf ${{ github.action_path }}/Makefile OVERLAY="${OVERLAY}" edit-kustomizations
+        done
