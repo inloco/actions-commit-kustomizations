@@ -11,12 +11,7 @@ split_image() {
     fi
 }
 
-if [[ ! -d "./k8s/overlays/${OVERLAY}" ]]
-then
-    exit 0
-fi
-
-cd ./k8s/overlays/${OVERLAY}
+cd ${OVERLAY}
 
 for IMAGE in ${IMAGES}
 do

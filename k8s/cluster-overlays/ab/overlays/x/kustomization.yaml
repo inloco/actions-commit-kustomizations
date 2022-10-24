@@ -1,0 +1,11 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+images:
+- name: incognia/example:blue
+  newTag: blue-
+- name: incognia/example:green
+  newTag: green-
+- name: incognia/example:red
+  newTag: red-
+- name: incognia/example:yellow
+  newTag: yellow-
