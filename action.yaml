@@ -12,12 +12,16 @@ inputs:
     description: Custom Image Tag
     required: false
     default: commit-sha
+  path:
+    description: Custom k8s path
+    required: false
+    default: ./k8s
 runs:
   using: composite
   steps:
     - name: Enforce Manifests .yaml Extension
       shell: bash
-      run: find ./k8s/overlays/*/kustomization.yml && echo 'This is an intentional error. K8s manifests extension must be ".yaml".' && exit 1 || echo 'Everything good to go!'
+      run: find ${{ inputs.path }}/overlays/*/kustomization.yml && echo 'This is an intentional error. K8s manifests extension must be ".yaml".' && exit 1 || echo 'Everything good to go!'
     - name: Set Kustomization Image Tags
       shell: bash
       run: |
@@ -31,6 +35,7 @@ runs:
         then
           export IMAGES="${IMAGE_REPOS}"
         fi
+        export K8S_PATH="${{ inputs.path }}"
 
         make -Bf ${{ github.action_path }}/Makefile OVERLAY="global-product" edit-kustomizations
         make -Bf ${{ github.action_path }}/Makefile OVERLAY="integration" edit-kustomizations
