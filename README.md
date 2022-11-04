@@ -16,13 +16,7 @@ example:
           incognia/example:red
 ```
 
-will try to update image tags in the following directories:
-
-- ./k8s/overlays/integration
-- ./k8s/overlays/production
-- ./k8s/overlays/staging
-
-edit the kustomization `images` field, e.g.:
+will try to update all `*/overlays/*/kustomization.yaml` files `images` field, e.g.:
 
 ```yaml
 apiVersion: kustomize.config.k8s.io/v1beta1
