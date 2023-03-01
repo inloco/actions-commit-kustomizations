@@ -16,5 +16,5 @@ cd ${OVERLAY}
 for IMAGE in ${IMAGES}
 do
     split_image ${IMAGE}
-    kustomize edit set image "${IMAGE}=*:${IMAGE_TAG}${IMAGE_TAG_SUFFIX}"
+    kustomize edit set image "${IMAGE_REPO}=*:${IMAGE_TAG}${IMAGE_TAG_SUFFIX}"
 done
