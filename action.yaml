@@ -45,5 +45,5 @@ runs:
         make -Bf ${{ github.action_path }}/Makefile commit-kustomizations
 
         echo "commit-hash<<EOF" >> ${GITHUB_OUTPUT}
-        git push --set-upstream "$$(git remote show)" "$$(git rev-parse --abbrev-ref HEAD)" && git rev-parse HEAD >> ${GITHUB_OUTPUT} || echo "Skipping commit..."
+        git push --set-upstream "$(git remote show)" "$(git rev-parse --abbrev-ref HEAD)" && git rev-parse HEAD >> ${GITHUB_OUTPUT} || echo "Skipping commit..."
         echo "EOF" >> ${GITHUB_OUTPUT}
