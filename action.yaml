@@ -28,6 +28,8 @@ runs:
       id: kustomize-image-tags
       shell: bash
       run: |
+        set -x
+
         export IMAGES="${{ inputs.images }}"
         export IMAGE_REPOS="${{ inputs.image-repos }}"
         if [[ ! -z "${IMAGES}" ]] && [[ ! -z "${IMAGE_REPOS}" ]]
