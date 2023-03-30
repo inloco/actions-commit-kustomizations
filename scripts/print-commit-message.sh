@@ -2,7 +2,8 @@
 
 set -e
 
-LAST_UPDATE_COMMIT_HASH="$(git log -i --author="github-actions\[bot\]" --grep="chore(k8s): update images to version" --max-count 1 --format=%H)"
+UPDATE_COMMIT_MESSAGE_PREFIX="chore(k8s): update images to version"
+LAST_UPDATE_COMMIT_HASH="$(git log -i --author="github-actions\[bot\]" --grep="${UPDATE_COMMIT_MESSAGE_PREFIX}" --max-count 1 --format=%H)"
 
 # If does not exist, commit body will be empty
 if [[ -z "${LAST_UPDATE_COMMIT_HASH}" ]]
@@ -20,15 +21,17 @@ then
     IS_MERGE_COMMIT=false
 fi
 
-printf "chore(k8s): update images to version ${IMAGE_TAG}\n\n"
+printf "${UPDATE_COMMIT_MESSAGE_PREFIX} ${IMAGE_TAG}\n\n"
 
 for COMMIT_HASH in ${COMMIT_HASHES}
 do
     if [[ ${IS_MERGE_COMMIT} = true ]]
     then
-        PR_REFERENCE="$(git log --format=%s -n1 ${COMMIT_HASH} | grep -oE "#[0-9]+")"
-        printf "$(git log --format=%b -n1 ${COMMIT_HASH}) (${PR_REFERENCE})\n"
+        PR_NUMBER="$(git log --format=%s -n1 ${COMMIT_HASH} | grep -oE "#[0-9]+")"
+        COMMIT_BODY="$(git log --format=%b -n1 ${COMMIT_HASH})"
+        printf "${COMMIT_BODY} (${PR_NUMBER})\n"
     else
-        git log --format=%s -n1 ${COMMIT_HASH} | cat
+        COMMIT_MESSAGE="$(git log --format=%s -n1 ${COMMIT_HASH})"
+        printf "${COMMIT_MESSAGE}\n"
     fi
 done
