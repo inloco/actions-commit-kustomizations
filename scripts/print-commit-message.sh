@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -e
+set -xe
 
 UPDATE_COMMIT_MESSAGE_PREFIX="chore(k8s): update images to version"
 LAST_UPDATE_COMMIT_HASH="$(git log -i --author="github-actions\[bot\]" --grep="${UPDATE_COMMIT_MESSAGE_PREFIX}" --max-count 1 --format=%H)"
