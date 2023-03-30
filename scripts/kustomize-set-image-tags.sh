@@ -2,6 +2,8 @@
 
 set -e
 
+OVERLAY=${1}
+
 split_image() {
     export IMAGE_REPO="$(sed -En 's/([^:]*).*/\1/p' <<< ${1})"
     export IMAGE_TAG_SUFFIX="$(sed -En 's/.*:(.*)/\1/p' <<< ${1})"

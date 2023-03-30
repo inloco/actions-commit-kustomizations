@@ -14,7 +14,7 @@ inputs:
     default: commit-sha
 outputs:
   commit-hash:
-    description: The hash from the resulting commit
+    description: The hash from the resulting commit, may be empty if unable to commit
     value: ${{ steps.kustomize-image-tags.outputs.commit-hash }}
 runs:
   using: composite
@@ -23,10 +23,11 @@ runs:
       shell: bash
       run: find ./k8s/overlays/*/kustomization.yml && echo 'This is an intentional error. K8s manifests extension must be ".yaml".' && exit 1 || echo 'Everything good to go!'
     - name: Set Kustomization Image Tags
+      env:
+        SCRIPTS_PATH: ${{ github.action_path }}/scripts
       id: kustomize-image-tags
       shell: bash
       run: |
-        export IMAGE_TAG="$(make -Bsf ${{ github.action_path }}/Makefile IMAGE_TAG="${{ inputs.image-tag }}" image-tag)"
         export IMAGES="${{ inputs.images }}"
         export IMAGE_REPOS="${{ inputs.image-repos }}"
         if [[ ! -z "${IMAGES}" ]] && [[ ! -z "${IMAGE_REPOS}" ]]
@@ -37,12 +38,16 @@ runs:
           export IMAGES="${IMAGE_REPOS}"
         fi
 
+        export IMAGE_TAG="$(${SCRIPTS_PATH}/print-image-tag.sh "${{ inputs.image-tag }}")"
+
         for OVERLAY in $(find ./k8s -type d -path "*/overlays/*" -prune)
         do
-          make -Bf ${{ github.action_path }}/Makefile OVERLAY="${OVERLAY}" edit-kustomizations
+          ${SCRIPTS_PATH}/kustomize-set-image-tags.sh "${OVERLAY}"
         done
 
-        make -Bf ${{ github.action_path }}/Makefile commit-kustomizations
+        git reset
+        find ./k8s -type f -name kustomization.yaml -exec git add {} \;
+        ${SCRIPTS_PATH}/print-commit-message.sh | git commit -F -
 
         echo "commit-hash<<EOF" >> ${GITHUB_OUTPUT}
         git push --set-upstream "$(git remote show)" "$(git rev-parse --abbrev-ref HEAD)" && git rev-parse HEAD >> ${GITHUB_OUTPUT} || echo "Skipping commit..."
