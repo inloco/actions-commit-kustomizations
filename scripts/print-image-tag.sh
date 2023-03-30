@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -xe
+set -e
 
 IMAGE_TAG=${1}
 
