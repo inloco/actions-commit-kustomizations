@@ -26,8 +26,10 @@ for PR_COMMIT_HASH in ${PR_COMMIT_HASHES}
 do
     if [[ ${HAS_MERGE_COMMIT} = true ]]
     then
-        git log --format=%B -n1 ${PR_COMMIT_HASH} | head -3 | tail -1
+        # Get commit subject
+        git log --format=%b -n1 ${PR_COMMIT_HASH} | cat
     else
-        git log --format=%B -n1 ${PR_COMMIT_HASH} | head -1
+        # Get commit message
+        git log --format=%s -n1 ${PR_COMMIT_HASH} | cat
     fi
 done
