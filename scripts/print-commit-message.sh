@@ -25,13 +25,17 @@ printf "${UPDATE_COMMIT_MESSAGE_PREFIX} ${IMAGE_TAG}\n\n"
 
 for COMMIT_HASH in ${COMMIT_HASHES}
 do
+    COMMIT_MESSAGE="$(git log --format=%s -n1 ${COMMIT_HASH})"
+
     if [[ ${IS_MERGE_COMMIT} = true ]]
     then
-        PR_NUMBER="$(git log --format=%s -n1 ${COMMIT_HASH} | grep -oE "#[0-9]+")"
-        COMMIT_BODY="$(git log --format=%b -n1 ${COMMIT_HASH})"
-        printf "${COMMIT_BODY} (${PR_NUMBER})\n"
+        if [[ "$(grep -oE "^Merge pull request" <<< ${COMMIT_MESSAGE})" ]]
+        then
+            PR_NUMBER="$(grep -oE "#[0-9]+" <<< ${COMMIT_MESSAGE})"
+            COMMIT_BODY="$(git log --format=%b -n1 ${COMMIT_HASH})"
+            printf "${COMMIT_BODY} (${PR_NUMBER})\n"
+        fi
     else
-        COMMIT_MESSAGE="$(git log --format=%s -n1 ${COMMIT_HASH})"
         printf "${COMMIT_MESSAGE}\n"
     fi
 done
