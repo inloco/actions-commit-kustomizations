@@ -31,7 +31,7 @@ do
     then
         if [[ "$(grep -oE "^Merge pull request" <<< ${COMMIT_MESSAGE})" ]]
         then
-            PR_NUMBER="$(grep -oE "#[0-9]+" <<< ${COMMIT_MESSAGE})"
+            PR_NUMBER="$(sed -nE 's/.*(#[0-9]+).*$/\1/p' <<< ${COMMIT_MESSAGE})"
             COMMIT_BODY="$(git log --format=%b -n1 ${COMMIT_HASH})"
             printf "${COMMIT_BODY} (${PR_NUMBER})\n"
         fi
